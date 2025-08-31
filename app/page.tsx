@@ -1,4 +1,5 @@
 import { UserProfile } from "./components/auth"
+import Body from "./components/Body";
 
 export default function Home() {
   return (
@@ -11,11 +12,7 @@ export default function Home() {
           <UserProfile />
         </div>
 
-        <div className="text-center mt-16">
-          <p className="text-gray-600 mb-8">
-            Sign in with Google to start managing your todos!
-          </p>
-        </div> 
+        <Body />
       </div>
     </div>
   );
