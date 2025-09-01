@@ -1,5 +1,39 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Environment Setup (.env)
+
+Before running the app, create a `.env` file in the project root with the following variables. These power the database (Prisma), authentication (NextAuth), and Google OAuth.
+
+Example `.env`:
+
+```
+# Database (PostgreSQL)
+# Use your own Postgres connection string. Prisma Accelerate or direct connection both work.
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
+
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="replace-with-a-long-random-string"
+
+# Google OAuth (NextAuth provider)
+GOOGLE_CLIENT_ID="your-google-oauth-client-id"
+GOOGLE_CLIENT_SECRET="your-google-oauth-client-secret"
+```
+
+Notes:
+- Generate `NEXTAUTH_SECRET` with: `openssl rand -base64 32` (or any strong random string).
+- In Google Cloud Console → Credentials, create an OAuth 2.0 Client ID (Web application), and set Authorized redirect URI to:
+  - `http://localhost:3000/api/auth/callback/google`
+- If you use Prisma Accelerate, set `DATABASE_URL` per Accelerate’s provided URL. Otherwise, use a standard Postgres URL as shown above.
+
+After adding `.env`, run Prisma migrations and generate the client if needed:
+
+```
+npx prisma migrate dev
+npx prisma generate
+```
+
+
 ## Getting Started
 
 First, run the development server:
