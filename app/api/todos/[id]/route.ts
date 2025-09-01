@@ -18,7 +18,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   if (body.description !== undefined) data.description = body.description
   if (body.completed !== undefined) data.completed = body.completed
   if (body.userId !== undefined) data.userId = body.userId
-  if (body.dueDate !== undefined) data.dueDate = new Date(body.dueDate)
+  if (body.dueDate !== undefined) {
+    const str = String(body.dueDate || '')
+    const parts = str.split('-').map((n: string) => Number(n))
+    const valid = parts.length === 3 && parts.every((n) => !Number.isNaN(n))
+    data.dueDate = valid
+      ? new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], 12, 0, 0))
+      : new Date(body.dueDate)
+  }
 
   const updated = await prisma.todoItem.update({ where: { id: params.id }, data })
   return NextResponse.json(updated)

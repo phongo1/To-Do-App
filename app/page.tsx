@@ -7,7 +7,7 @@ export default function Home() {
       <div className="container mx-auto py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800">
-            To-Do App
+            App Practice
           </h1>
           <UserProfile />
         </div>
