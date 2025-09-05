@@ -104,6 +104,7 @@ export default function Body() {
               open={open}
               onClose={() => setOpen(false)}
               onCreated={getAllToDoItems}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               userId={data?.user && (data.user as any).id}
             />
             <CompletedTasks
