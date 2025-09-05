@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 type Todo = {
   id: string;
@@ -12,15 +12,17 @@ type Todo = {
   dueDate: string | Date;
 };
 
-export default function TodoPage({ params }: { params: { id: string } }) {
+export default function TodoPage() {
   const router = useRouter();
+  const params = useParams<{ id: string }>();
+  const id = params?.id as string;
   const [todo, setTodo] = useState<Todo | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const fetchTodo = async () => {
     setLoading(true);
-    const res = await fetch(`/api/todos/${params.id}`);
+    const res = await fetch(`/api/todos/${id}`);
     const data = await res.json();
     setTodo(data);
     setLoading(false);
@@ -29,7 +31,7 @@ export default function TodoPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     fetchTodo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.id]);
+  }, [id]);
 
   const save = async () => {
     if (!todo) return;

@@ -13,8 +13,10 @@ const handler = NextAuth({
   ],
   callbacks: {
     session({ session, user }) {
-      // Add user ID to session
-      session.user.id = user.id
+      // Add user ID to session safely for TS/lint
+      if (session.user && user?.id) {
+        session.user.id = user.id
+      }
       return session
     },
   },
