@@ -6,12 +6,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  const todo = await prisma.todoItem.findUnique({ where: { id: params.id } })
+export async function GET(request: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+  const { id } = await ctx.params
+  const todo = await prisma.todoItem.findUnique({ where: { id } })
   return NextResponse.json(todo)
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+  const { id } = await ctx.params
   const body = await request.json()
   const data: { title?: string; description?: string; completed?: boolean; userId?: string; dueDate?: Date } = {}
   if (body.title !== undefined) data.title = body.title
@@ -27,11 +29,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       : new Date(body.dueDate)
   }
 
-  const updated = await prisma.todoItem.update({ where: { id: params.id }, data })
+  const updated = await prisma.todoItem.update({ where: { id }, data })
   return NextResponse.json(updated)
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-  const deleted = await prisma.todoItem.delete({ where: { id: params.id } })
+export async function DELETE(request: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+  const { id } = await ctx.params
+  const deleted = await prisma.todoItem.delete({ where: { id } })
   return NextResponse.json(deleted)
 }
